@@ -1,4 +1,4 @@
-import { ADD_DRAGON, SET_DRAGON } from "../constants/actions";
+import { ADD_DRAGON, SET_DRAGON, DELETE_DRAGON } from "../constants/actions";
 
 export const set_dragon = payload => {
 
@@ -11,6 +11,13 @@ export const add_dragon = () => {
 
     return {
         type: ADD_DRAGON
+    }
+}
+
+export const delete_dragon = payload => {
+
+    return {
+        type: DELETE_DRAGON, payload
     }
 }
 

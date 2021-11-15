@@ -3,7 +3,7 @@ import { set_dragon, add_dragon } from "../actions/actions-types";
 import Button from "../Styles/Button";
 
 const Form = () => {
-  const { dragon, message } = useSelector((state) => state);
+  const { dragon, message } = useSelector((state) => state);    
 
   const dispatch = useDispatch();
 

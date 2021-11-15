@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 const Button = styled.button`
 /* Adapt the colors based on primary prop */
-background: ${props => props.primary ? "palevioletred" : "white"};
-color: ${props => props.primary ? "white" : "palevioletred"};
+background: ${props => props.delete ? "palevioletred" : "white"};
+color: ${props => props.delete ? "white" : "palevioletred"};
 
 font-size: 1em;
 margin: 1em;

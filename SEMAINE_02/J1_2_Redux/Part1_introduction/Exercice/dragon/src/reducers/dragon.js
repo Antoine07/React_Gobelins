@@ -1,4 +1,4 @@
-import { ADD_DRAGON, SET_DRAGON } from "../constants/actions";
+import { ADD_DRAGON, DELETE_DRAGON, SET_DRAGON } from "../constants/actions";
 
 // source de vérité de l'application
 const stateInit = {
@@ -18,7 +18,7 @@ const reducer = (state = stateInit, action = {}) => {
       return {
         ...state,
         dragon,
-        message : ''
+        message: "",
       };
 
     case ADD_DRAGON:
@@ -35,20 +35,36 @@ const reducer = (state = stateInit, action = {}) => {
         return {
           ...state,
           message: `Attention ce dragon (${dragon}) existe déjà `,
-          dragon : ''
+          dragon: "",
         };
       }
 
-      // copie peu profonde ici 
-      // dragons = state.dragons.concat(dragon); // nouveau tableau également 
-      dragons = [ ...state.dragons , dragon]; 
+      // copie peu profonde ici
+      // dragons = state.dragons.concat(dragon); // nouveau tableau également
+      dragons = [...state.dragons, dragon];
 
       return {
         ...state,
         dragon: "",
-        dragons, 
-        count : state.count + 1,
-        message : `Merci pour l'ajout de votre dragon ${dragon}`
+        dragons,
+        count: state.count + 1,
+        message: `Merci pour l'ajout de votre dragon ${dragon}`,
+      };
+
+    case DELETE_DRAGON:
+      dragon = action.payload;
+
+      console.log(dragon)
+
+      dragons = [...state.dragons];
+
+      dragons = dragons.filter((d) => d !== dragon);
+
+      return {
+        ...state,
+        dragons,
+        message : `Le dragon ${dragon} a été supprimer avec succès.`,
+        count : state.count - 1
       };
 
     default:
