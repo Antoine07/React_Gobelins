@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class Users extends React.Component {
+
+            render() {
+                const { users } = this.props;
+
+                return (
+                    <ul>
+                        {users.map((user, i) => <li key={i}>{user}</li>)}
+                    </ul>
+                )
+            }
+        }
+
+        class Form extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { username: '', users: [], message: '' };
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            handleChange(event) {
+                const { name, value } = event.target;
+                if (name === 'username') { this.setState({ [name]: value.toUpperCase(), message: '' }); return; }
+
+                // si on a d'autres champs on n'a peut-être pas envi mettre ces champs en majuscule
+                this.setState({ [name]: value, message: '' })
+            }
+
+            handleSubmit(event) {
+                event.preventDefault(); // première chose à faire 
+
+                const { username, users } = this.state;
+
+                if(username.trim() == ''){
+                    this.setState({  message: `Attention votre champ est vide.` });
+
+                    return;
+                }
+
+                if( users.includes(username) == true ){
+                    this.setState({  message: `Attention l'utilisateur ${username} existe déjà dans la liste.` });
+
+                    return;
+                }
+
+                users.push(username);
+                const message = "Merci pour votre ajout";
+
+                this.setState({
+                    users,
+                    message,
+                    username : ''
+                });
+            }
+
+            render() {
+                const { username, users, message } = this.state;
+
+                return (
+                    <React.Fragment>
+                        {message && <p>{message}</p>}
+                        <form onSubmit={this.handleSubmit}>
+                            <label>
+                                Username:
+                                <input name="username" type="text" value={username} onChange={this.handleChange} />
+                            </label>
+                            <input type="submit" value="Add" />
+                        </form>
+                        {users.length > 0 && (
+                            <Users users={users} />
+                        )}
+                    </React.Fragment>
+                );
+            }
+        }
+
+        // Rendu dans le DOM
+        ReactDOM.render(
+            <Form />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>

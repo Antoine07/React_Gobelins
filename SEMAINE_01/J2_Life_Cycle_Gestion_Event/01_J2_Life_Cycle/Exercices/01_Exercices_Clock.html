@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- JS, Popper.js, and jQuery -->
+    <style>
+        .special {
+            margin-top: 20%;
+            text-align: center;
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const container = document.getElementById('root');
+        const time = 1000;
+        const duration = 15 * time;
+
+        class Clock extends React.Component {
+
+            constructor(props) {
+                super(props);
+
+                this.state = {
+                    timer: new Date
+                };
+
+                this.horloge = null;
+            }
+
+            componentDidMount() {
+                this.horloge = setInterval(() => {
+                    this.setState({
+                        timer: new Date
+                    })
+                }, time);
+            }
+
+            componentWillUnmount() {
+              clearInterval(this.horloge); // pensez à bien nettoyer les API ouvertes au démontage de l'application
+            }
+
+            render() {
+                const { timer } = this.state;
+
+                return (
+                    <p>{timer.toLocaleTimeString()}</p>
+                )
+            }
+        }
+
+        class App extends React.Component {
+
+            constructor(props) {
+                super(props);
+
+                this.state = {
+                    life: true
+                };
+            }
+
+            componentDidMount() {
+                setTimeout(() => {
+                    this.setState({
+                        life: false
+                    })
+                }, duration)
+            }
+
+            render() {
+
+                const { life } = this.state;
+
+                return (
+                    <div className="container">
+                        {life ? <Clock /> : <p>Delete Horloge</p>}
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            container
+        );
+
+    </script>
+</body>
+
+</html>

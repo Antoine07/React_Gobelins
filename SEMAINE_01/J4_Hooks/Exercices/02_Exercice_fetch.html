@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const CONTAINER = document.getElementById('root');
+        const url = `https://jsonplaceholder.typicode.com/users`;
+
+        const Users = ({users}) => {
+
+            return (
+                    <ul>
+                        {users.map((user, i) => <li key={i}>{user}</li>)}
+                    </ul>
+            )
+        }
+
+        const Search = () => {
+            const [users, setUsers] = React.useState([]);
+            const [search, setSearch] = React.useState([]);
+
+            const [isLoading, setIsloading] = React.useState(true);
+            const [user, setUser] = React.useState('');
+            const [message, setMessage] = React.useState('');
+
+            React.useEffect(() => {
+                const fetchUsers = async () => {
+                    const response = await fetch(url);
+                    const users = await response.json();
+                    if (users.length) setIsloading(false);
+
+                    return users.map((user) => user.name);
+                }
+
+                fetchUsers().then((names) => setUsers(names));
+            }, []);
+
+            const handleChange = e => {
+                const { name, value: userSearch } = e.target;
+
+                setUser(userSearch);
+
+                if (userSearch.trim() === '') {
+                    setSearch([]);
+
+                    return;
+                }
+
+                const usersSearch = users.filter(user => user.includes(userSearch));
+
+                if(usersSearch.length > 0) {
+                    setSearch(usersSearch);
+                }
+
+            }
+
+            if (isLoading)
+                return <p>loading...</p>;
+
+            console.log(search)
+
+            return (
+                <React.Fragment>
+                    <p><input type="text" name="user" value={user} onChange={handleChange} /></p>
+                    { search.length > 0 && <Users users={search} />}
+                </React.Fragment>
+            )
+        }
+
+        const App = () => {
+
+
+            return (
+                <React.Fragment>
+                    <Search />
+                </React.Fragment>
+            )
+        }
+
+        ReactDOM.render(
+            <App />,
+            CONTAINER
+        );
+    </script>
+</body>
+
+</html>

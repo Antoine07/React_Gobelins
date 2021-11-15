@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<style>
+    .center{
+        margin: 20% auto;
+        font-size: 10rem;
+        font-weight: bold;
+        text-align: center;
+        text-transform: capitalize;
+    }
+</style>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const container = document.getElementById('root');
+        const time = 1000;
+        const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+        const max = letters.length;
+
+        class Letter extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = {
+                    letters: new Map() // structure de données clé/valeur
+                };
+
+                // console.log("CONSTRUCTOR");
+            }
+
+            componentDidUpdate(prevProps, prevStates) {
+                // console.log("DIDUPDATE");
+                // toujours mettre une condition pour éviter un effet de bord infini
+                if(this.props.letter != prevProps.letter){
+
+                    this.state.letters.set('pLetter', prevProps.letter);
+                    this.state.letters.set('letter', this.props.letter);
+
+                    this.setState({
+                        letters : this.state.letters
+                    })
+                }
+                
+            }
+
+            render(){
+                // console.log("RENDER");
+                const { letters } = this.state;
+
+                if(letters.size == 2)
+                    return(
+                        <p>{letters.get('pLetter')} {letters.get('letter')}</p>
+                    )
+
+                return (
+                    <p>No letter </p>
+                )
+            }
+        }
+
+        class App extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    letters: this.props.letters,
+                    count: 0
+                };
+
+                this.interval =  null;
+            }
+
+            componentDidMount() {
+                const { max } = this.props;
+
+                this.interval = setInterval(()=> {
+                    this.setState( { count : (this.state.count + 1) % max })
+                }, time);
+               
+            }
+
+            render() {
+                const { letters, count } = this.state;
+                const letter = letters[count];
+
+                return (
+                    <div className="container">
+                        <div className="row center">
+                            <Letter letter={letter} />
+                        </div>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <App letters={letters} max={max} />,
+            container
+        );
+
+    </script>
+</body>
+
+</html>

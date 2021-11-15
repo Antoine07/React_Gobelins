@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        class Form extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { username: '', email : '' };
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            handleChange(event) {
+                const {name, value } = event.target;
+                this.setState({ [name]: value });
+            }
+
+            handleSubmit(event) {
+                event.preventDefault();
+            }
+
+            render() {
+                const { username, email } = this.state; 
+
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        <Input 
+                            type="text"
+                            name="username"
+                            value={username}
+                            onChange={this.handleChange}
+                        />
+                        <Input 
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={this.handleChange}
+                        />
+                        <input type="submit" value="Add" />
+                    </form>
+                );
+            }
+        }
+
+        class Input extends React.Component{
+
+            render(){
+
+                return(
+                    <div style={{margin: "10px"}}>
+                        <input { ...this.props } />
+                    </div>
+                )
+            }
+        }
+
+        // Rendu dans le DOM
+        ReactDOM.render(
+            <Form />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>

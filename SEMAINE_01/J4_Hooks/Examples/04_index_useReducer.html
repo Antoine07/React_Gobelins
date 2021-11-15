@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        // source de vérité ne pas toucher 
+        const initialState = { count: 0, message: '', step: 1 };
+
+        const reducer = (state, action) => {
+            let message = '';
+            switch (action.type) {
+                case 'incr':
+
+                    if ((state.count + state.step) % 2 === 0) {
+                        message = "even";
+                    }
+
+                    return { ...state, count: state.count + state.step, message };
+                case 'decr':
+                    if ((state.count + state.step) % 2 === 0) {
+                        message = "even";
+                    }
+
+                    if (state.count > 0)
+                        return { ...state, count: state.count - state.step, message };
+
+                    return {
+                        ...state,
+                        message: "Attention vous ne pouvez pas décrémenter dans les négatifs"
+                    }
+
+                case 'step':
+                    const { newStep } = action;
+
+                    return { ...state, step: newStep + state.step }
+
+                case 'reset':
+
+                    return { ...state, ...initialState }
+
+                default:
+                    return state;
+            }
+        }
+        const Counter = () => {
+            // un state et sa logique algo pour modifier son état
+            const [state, dispatch] = React.useReducer(reducer, initialState);
+            const { count, message, step } = state;
+
+            return (
+                <div style={{ display: "flex" }}>
+                    <div>
+                        <p>Counter {count} avec le step : {step}</p>
+                        <button onClick={() => dispatch({ type: 'decr' })}>-</button>
+                        <button onClick={() => dispatch({ type: 'incr' })}>+</button>
+                        <button onClick={() => dispatch({ type: 'step', newStep: 2 })}>Change step +2</button>
+                        <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+                    </div>
+                    <div>
+                        {message && <p>{message}</p>}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <Counter />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello React</title>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const CONTAINER = document.getElementById('root');
+    const BASES = [ 2, 3, 7, 16];
+
+    const Message = ({message, color}) => (<div style={color}>{message}</div>);
+
+    class BaseNumberInput extends React.Component {
+
+      constructor(props) {
+        super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+      }
+
+      handleChange(e) {
+        const { value : num, name : base } = e.target;
+        this.props.onChangeBase(num, base);
+      }
+
+      render() {
+        const { number, base } = this.props;
+
+        const label = {  padding : "5px", display: 'block' } ;
+
+        return (
+          <React.Fragment>
+              <label style={label} >Base : {base}</label>
+              <input 
+                type="text"
+                name={base}
+                value={number}
+                onChange={this.handleChange}
+              />
+          </React.Fragment>
+        )
+      }
+    }
+
+    class App extends React.Component {
+
+      constructor(props) {
+        super(props);
+        this.state = {
+          number: '',
+          conversion :'',
+          base: 10,
+          message: ''
+        }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.onChangeBase = this.onChangeBase.bind(this);
+      }
+
+      conversion(num, base, newBase) {
+
+        return num === '' ? '' : parseInt(num, base).toString(newBase);
+      }
+
+      componentDidUpdate(prevProps, prevState) {
+        if (prevState.base != this.state.base) {
+            const { number , base } = this.state;
+            this.onChangeBase(number, 10, base);
+        }
+      }
+
+      handleChange(e) {
+        const { value : base } = e.target;
+
+        this.setState({
+          base : base,
+          message : ''
+        });
+      }
+
+      onChangeBase(num, base, newBase){
+
+        if(num == '') {
+          this.setState({
+            number : '',
+            conversion : '',
+            message : ''
+          });
+
+          return;
+        }
+
+        if( parseInt(num, base).toString(base) != num ){
+
+          this.setState({
+            message : `Attention ${num} n'est pas un nombre en base ${base}`
+          });
+
+          return;
+        }
+
+        if(base == 10)
+          this.setState({
+            number : num,
+            conversion : this.conversion(num, base, newBase),
+            message : ''
+          });
+
+        if(base != 10)
+          this.setState({
+            number :  this.conversion(num, base, 10),
+            conversion : num,
+            message : ''
+          });
+      }
+
+      render() {
+        const { base, number, conversion, message } = this.state;
+        const { bases } = this.props;
+
+        const messageError = { 
+          message, 
+          color : { color : 'red' , fontSize : "15px", margin : "5%" } 
+        };
+
+        const styleSelect = {
+          display : "block", 
+          marginTop : "5%"
+        }
+
+        return (
+          <Wrapper message={ message && <Message { ...messageError } />}>
+            <BaseNumberInput 
+              base={10}
+              number={number}
+              onChangeBase={(num) => this.onChangeBase(num, 10, base)}
+            />
+            <BaseNumberInput 
+              base={base}
+              number={conversion}
+              onChangeBase={(num) => this.onChangeBase(num, base, 10)}
+            />
+            { bases.length > 0 && (
+              <React.Fragment>
+                <label style={styleSelect} > Base </label>
+                <select 
+                  name="base" 
+                  onChange={this.handleChange} 
+                  style={styleSelect}
+                  defaultValue = '10'
+                >
+                  <option value="10" >10</option>
+                  {bases.map((base, i)=>(<option key={i} value={base} >{base}</option>))}
+                </select>
+              </React.Fragment>
+            )}
+          </Wrapper>
+        );
+      }
+    }
+
+    class Wrapper extends React.Component{
+
+      render(){
+
+        const box = {
+          width: '300px',
+          margin: '5px'
+        }
+
+        const container = { 
+            display: 'flex',
+            justifyContent: 'center'
+        };
+
+        const { children, message } = this.props;
+
+        return (
+          <div style={container}>
+            <div style={box}>
+                { message }
+                { children }
+            </div>
+          </div>
+        )
+      }
+    }
+
+    ReactDOM.render(
+      <App bases={BASES} />,
+      CONTAINER
+    );
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <!-- Library -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        // Création de composant en créant des classes
+        class Hello extends React.Component {
+
+            render() {
+                
+                // pour afficher une liste d'éléments directement dans le rendu => on utilise la fonction map de JS, une des seules acceptées pour faire ça par JSX, pas de for dans le rendu
+                const elems = ['a', 'b', 'c', 'd' ];
+                
+                // attention à bien mettre une clé unique dans les span pour que React identifie de manière unique chaque élément dans le DOM réel.
+                return (
+                    <div className="heading" >
+                        {elems.map((el, i) => <span key={i} >{el}</span>)}
+                    </div>
+                )
+            }
+        }
+
+        // Rendu dans le DOM
+        ReactDOM.render(
+            <Hello message="Hello React" subtitle="Enjoy ! " />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>

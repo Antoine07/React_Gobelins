@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+
+        .principal {
+            background-color: beige;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const generate = (max = 20) => {
+            let numbers = [];
+
+            while (numbers.length < max) {
+                let number = Math.round(Math.random() * 21);
+                while (numbers.includes(number) === true) {
+                    number = Math.round(Math.random() * 21);
+                }
+
+                numbers.push(number);
+            }
+
+            return numbers;
+        }
+        class Numbers extends React.Component {
+
+            render() {
+                const { numbers } = this.props;
+
+                return (
+                    <div>
+                        <p>{numbers.map((num, i) => <span style={{margin: "2px"}} key={i}>{num}</span>)}</p>
+                    </div>
+                );
+            }
+        }
+
+        class App extends React.Component {
+
+            render() {
+                const { numbers } = this.props;
+                return (
+                    <div style={{ width : "500px" , margin: "auto"}}>
+                        <Numbers numbers={numbers} />
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <App numbers={ generate() } />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>

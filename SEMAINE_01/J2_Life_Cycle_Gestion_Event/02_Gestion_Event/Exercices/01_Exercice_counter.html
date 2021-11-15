@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .app_btn {
+            margin: 2rem;
+        }
+
+        .app__center {
+            text-align: center;
+            font-size: 2rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Constantes de l'application
+        const container = document.getElementById('root');
+        const time = 1000;
+
+        class Counter extends React.Component {
+
+            constructor(props) {
+                super(props);
+                this.state = {
+                    count: 0,
+                    disabled: false
+                }
+                this.start = this.start.bind(this);
+                this.stop = this.stop.bind(this);
+                this.reset = this.reset.bind(this);
+
+                this.interval = null;
+            }
+
+            start() {
+                clearInterval(this.interval);
+                this.setState({ disabled: true });
+
+                this.interval = setInterval(() => {
+                    this.setState({
+                        count: this.state.count + this.props.step
+                    })
+                }, time);
+            }
+
+            stop() {
+                clearInterval(this.interval);
+                this.setState({ disabled: false });
+            }
+
+            reset() {
+                clearInterval(this.interval);
+                this.setState({ disabled: false });
+                this.setState({
+                    count: 0
+                })
+            }
+
+            render() {
+                const { count, disabled } = this.state;
+
+                return (
+                    <React.Fragment>
+                        <p>Counter {count} </p>
+                        <div className="btn">
+                            <button disabled={disabled} onClick={this.start}>Start</button>
+                        </div>
+                        <div className="btn">
+                            <button disabled={!disabled} onClick={this.stop}>Stop</button>
+                        </div>
+                        {/* on utilise le && passif il permet de ne pas évaluer la deuxième prédicat */}
+                        {count > 0 && (
+                            <div className="btn">
+                                <button onClick={this.reset}>Reset</button>
+                            </div>
+                        )}
+                    </React.Fragment>
+                );
+            }
+        }
+
+        class App extends React.Component {
+
+            render() {
+
+                return (
+                    <React.Fragment>
+                        <Counter step={1} />
+                        <Counter step={2} />
+                    </React.Fragment>
+                )
+            }
+        }
+
+        ReactDOM.render(
+            <App />,
+            container
+        );
+
+
+    </script>
+</body>
+
+</html>

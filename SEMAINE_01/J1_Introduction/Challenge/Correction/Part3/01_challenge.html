@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+
+        .principal {
+            background-color: beige;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const container = document.getElementById('root') ;
+        const generate = (max = 20) => {
+            let numbers = [];
+
+            while (numbers.length < max) {
+                // 1 et 20 large
+                let number = Math.round(Math.random() * 19 + 1);
+                while (numbers.includes(number) == true) {
+                    number = Math.round(Math.random() * 19 + 1);
+                }
+                numbers.push(number);
+            }
+            return numbers;
+        }
+        const time  = 1000;
+
+        class Numbers extends React.Component{
+            constructor(props){
+                // ne jamais définir de props avant super, sinon cela provoquera une erreur
+                super(props); // on appelle le constructeur de la classe Component, c'est obligatoire si vous définissez un constructeur
+                this.state = {
+                    numbers : this.props.numbers,
+                    count : 0,
+                }
+            }
+
+            render(){
+                const {numbers, count} = this.state;
+                const { max } = this.props;
+
+                const classNumberNormal = {
+                    margin: "10px",
+                    fontSize: "2rem",
+                    fontWeight: "normal"
+                }
+
+                const classNumberBold = {
+                    margin: "10px",
+                    fontSize: "2rem",
+                    fontWeight: "bold"
+                }
+
+                if(count < max) {
+                    setTimeout(() => {
+                        this.setState({
+                            count : this.state.count + 1,
+                            numbers : [ ...numbers.slice(0, count + 1).sort((a,b) => a - b), ...numbers.slice(count + 1)  ]
+                        })
+                    }, time);
+                }
+
+                return(
+                    <div>
+                        <p>{numbers.map((number, i) => <span key={i} style={ i < count ? classNumberBold : classNumberNormal} >{number}</span>)}</p>
+                    </div>
+                )
+            }
+        }
+
+        class App extends React.Component{
+
+            render(){
+                const { numbers } = this.props;
+
+                return(
+                    <div style={{ width: "500px", margin: "auto"}}>
+                        <Numbers numbers={numbers} max={numbers.length}/>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(
+            <App numbers={generate()} />,
+            container
+        );
+    </script>
+</body>
+
+</html>

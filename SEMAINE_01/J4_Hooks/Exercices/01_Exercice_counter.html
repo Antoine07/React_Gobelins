@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        const CONTAINER = document.getElementById('root');
+        const time = 1000;
+       
+        const Counter = (props) => {
+            const [count, setCount] = React.useState(0);
+            const [active, setActive] = React.useState(false);
+            let ref = null;
+
+            React.useEffect(() => {
+               
+                if (active) {
+                    ref = setTimeout(() => {
+                        setCount(count + 1);
+                    }, time);
+                }
+                return () => {
+                    console.log("ref", ref);
+                    clearTimeout(ref);
+                };
+            }, [active, count])
+
+            const reset = () => {
+                setActive(false); 
+                setCount(0) ;
+            }
+
+            return (
+                <React.Fragment>
+                    <p>{count}</p>
+                    <p><button disabled={active} onClick={()=>setActive(true)}>Start</button></p>
+                    <p><button disabled={!active} onClick={()=>setActive(false)}>Stop</button></p>
+                    {count > 0 && (
+                        <p><button onClick={reset} >Reset</button></p>
+                    )}
+                </React.Fragment>
+            )
+        }
+
+        const App = () => {
+            const [display, setDisplay] = React.useState(false);
+
+            return (
+                <React.Fragment>
+                    <p><button onClick={() => setDisplay(!display)}>Display</button></p>
+                    {display && <Counter />}
+                </React.Fragment>
+            )
+        }
+
+        ReactDOM.render(
+            <App />,
+            CONTAINER
+        );
+    </script>
+</body>
+
+</html>

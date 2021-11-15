@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <!-- Library -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const students = [
+
+            { notes: [12, 11, 10], name: "Alan" },
+            { notes: [18, 10, 19], name: "Alice" },
+            { notes: [10, 9, 11], name: "Bernard" },
+            { notes: [11, 17, 19], name: "Sophie" },
+            { notes: [], name: "Sophie" },
+            { name: "Alban" },
+        ];
+
+        const average = (notes, precision = 10) => {
+            if (notes.length === 0) return "pas de note ";
+
+            let s = 0;
+            for (const note of notes) {
+                s += note;
+            }
+
+            return Math.floor((s / notes.length) *precision)/ precision;
+        }
+
+        const container = document.getElementById('root');
+
+        class Student extends React.Component {
+
+            render() {
+                const { students } = this.props;
+
+                return (
+                    <ul>
+                        {students.map((student, i) => {
+                            const { notes, name } = student;
+                            
+                            if (notes)
+                                return (
+                                    <li key={i}>
+                                        {name} moyenne : { average(notes) }
+                                    </li>
+                                );
+
+                            return (
+                                <li key={i} >Aucune note pour : {name}</li>
+                            )
+                        })}
+                    </ul>
+                )
+            }
+        }
+
+        class App extends React.Component {
+
+            render() {
+                const { students } = this.props;
+
+                return <Student students={students} />;
+            }
+        }
+
+        // App composant racine 
+        ReactDOM.render(
+            <App students={students} />,
+            container
+        );
+    </script>
+</body>
+
+</html>

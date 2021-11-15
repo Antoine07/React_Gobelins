@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <!-- Library -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        // Création de composant en créant des classes
+        class Hello extends React.Component {
+
+            render() {
+                // lecture seule pour les props
+               // this.props.message = "Hello Angular";
+                // Ne marche pas il faut un conteneur pour monter les éléments dans le DOM
+                // return (
+                //         <h1>{this.props.message}</h1>
+                //         <p>{this.props.subtitle}</p>
+                // )
+                
+                // création d'un conteneur pour monter les éléments dans le DOM
+                // Il faut un point d'origine pour monter l'arbre React
+                return (
+                    <div>
+                        <h1>{this.props.message}</h1>
+                        <p>{this.props.subtitle}</p>
+                    </div>
+                )
+            }
+        }
+
+        // Rendu dans le DOM
+        ReactDOM.render(
+            <Hello message="Hello React" subtitle="Enjoy ! " />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+
+</html>

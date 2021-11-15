@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <style>
+        .heading {
+            color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const Counter = () => {
+            const [count, setCount] = React.useState(0);
+
+            React.useEffect(
+                () => {
+                    console.log(`First message: You clicked ${count} times`);
+                    // Cleanup
+                    // Lorsqu'on démonte l'élément Counter du DOM.
+                    // Lorsque React met à jour le state count, il nettoie l'état du state précédent de count
+                    return () => { console.log('unmount component 1'); }
+                },
+                [count]
+            );
+
+            return (
+                <div>
+                    <p>You clicked {count} times</p>
+                    <button onClick={() => setCount(count + 1)}>
+                        Click me
+                    </button>
+                </div>
+            );
+        }
+
+        const App = () => {
+
+            const [life, setLife] = React.useState(true);
+
+            React.useEffect(
+                () => {
+                    
+                    setTimeout(() => setLife(false), 2*1000)
+                   
+                },
+                []
+            );
+
+            return (
+                life ? <Counter /> : <p>Dead</p>
+            )
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+
+
+    </script>
+</body>
+
+</html>
