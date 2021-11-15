@@ -2,7 +2,9 @@ import { useSelector } from "react-redux";
 import Dragon from "./Dragon";
 
 const Dragons = () => {
-  const { dragons } = useSelector((state) => state);
+  const { dragons } = useSelector((state) => state.dragon);
+
+  console.log(dragons);
 
   if (dragons.length > 0)
     return (
