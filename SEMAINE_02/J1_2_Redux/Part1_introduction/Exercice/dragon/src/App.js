@@ -1,22 +1,21 @@
 import Dragons from "./components/Dragons";
+import Form from "./components/Form";
 import Col from "./Styles/Col";
 import Container from "./Styles/Container";
 import GlobalStyle from "./Styles/Global";
 
-
-
-const App = ()  =>{
+const App = () => {
   return (
     <Container>
       <GlobalStyle />
       <Col>
-      FORM
+        <Form />
       </Col>
       <Col>
-      <Dragons />
+        <Dragons />
       </Col>
     </Container>
   );
-}
+};
 
 export default App;
