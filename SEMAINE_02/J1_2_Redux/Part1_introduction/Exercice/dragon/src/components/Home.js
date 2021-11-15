@@ -1,16 +1,18 @@
 import Dragons from "./Dragons";
+import Form from "./Form";
 import Col from "../Styles/Col";
-import Nav from "./Nav";
+import Container from "../Styles/Container";
 
 const Home = () => {
   return (
-      <>
-        <Nav />
-        <Col>FORM</Col>
-        <Col>
-          <Dragons />
-        </Col>
-      </>
+    <Container>
+      <Col>
+        <Form />
+      </Col>
+      <Col>
+        <Dragons />
+      </Col>
+    </Container>
   );
 };
 

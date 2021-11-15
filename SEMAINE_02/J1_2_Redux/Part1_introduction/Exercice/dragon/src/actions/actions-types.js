@@ -14,7 +14,6 @@ export const add_dragon = () => {
     }
 }
 
-
 // TODO montrer comment faire une copie profonde
 export const copyDragonsComplexe = (store) => {
 
